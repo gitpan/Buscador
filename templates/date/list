@@ -1,0 +1,14 @@
+[% SET title = date.strftime("%Y-%m-%d") %]
+[% INCLUDE header title="Mails for $title" %]
+[% PROCESS macros %]
+<h1> Mails for [% title %] </h1>
+
+[% INCLUDE searchbox %]
+
+[% FOR mail = mails %]
+<P>
+    [% summary(mail); %]
+</P>
+
+[% END %]
+[% INCLUDE footer %]

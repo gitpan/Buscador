@@ -1,0 +1,28 @@
+[% INCLUDE header title = list.name %]
+[% PROCESS macros %]
+<h1> [% list.name %] </h1>
+
+[% MACRO clean_name(name) BLOCK;
+    name | replace('\W+', '.');
+   END;
+ SET search_name = clean_name(list.name);
+    SET hint = 'You can search for mails in this list by adding <I>+list:"' _ search_name _ '"</I> to your search terms';
+    INCLUDE searchbox;
+%]
+
+[% FOR mail = recent;
+    mailday = mail.date.ymd;
+    IF mail == recent.first or mailday != previous %]
+        <h3> [% mailday %] </h3>
+    [% END %]
+    [% previous = mailday %]
+<P>
+    [% summary_link(mail) %]
+    <BLOCKQUOTE>
+    [% mail.original |html %]
+    </BLOCKQUOTE>
+</P>
+
+[% END %]
+<a href="[%base|remove('/$')%]/list/atom/[% list.id %]"><img src="[% config.img_base %]/atom.gif"></a>
+[% INCLUDE footer %]

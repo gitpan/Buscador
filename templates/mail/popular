@@ -1,0 +1,18 @@
+[% INCLUDE header title = "Most popular mails" %]
+[% PROCESS macros %]
+<h1> Most popular mails </h1>
+
+[% INCLUDE searchbox %]
+
+<P> <A HREF="[% base | remove('/$')%]/list/list"> View by mailing list
+</A> </P>
+[% FOR mail = mails %]
+<P>
+    [% summary(mail); %]<br />
+    <em>Votes:</em> [% mail.votes.size %]<br/>
+</P>
+
+[% END %]
+
+
+[% INCLUDE footer %]

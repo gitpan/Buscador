@@ -1,0 +1,10 @@
+<DIV class="search">
+<FORM ACTION="[%base|remove('/$')%]/mail/search/">
+<INPUT NAME="terms" VALUE="[%request.query.terms%]"> 
+<INPUT TYPE="submit" VALUE="Search!">
+</FORM>
+[% IF hint %]
+<DIV class="searchhints"> Did you know... [% hint %] </DIV>
+[% END %]
+[% INCLUDE pager %]
+</DIV>

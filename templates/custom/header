@@ -1,0 +1,12 @@
+<HTML>
+    <HEAD>
+        <title> [% (title || "Buscador") | html %] </title>
+
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+
+<LINK title=myStyle href="[% config.img_base %]/buscador.css" type=text/css rel=stylesheet>
+
+</HEAD>
+<BODY>
+<DIV class="logo"><a href="[% base %]"><img src="[% config.img_base %]/buscador.gif" border="0" width=216 height=78></a></DIV>
+<DIV class="content">
