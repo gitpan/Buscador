@@ -41,15 +41,9 @@ sub format_body {
 
     # NOTE! this needs a lot of work 
     my $ct = $mail->simple->header('Content-Type') || "";
-<<<<<<< .mine
-
-	
-    return $mail->body if ($ct =~ m!text/html!i);
-=======
 
     
     return $mail->body if ($ct =~ m!text/html!i);
->>>>>>> .r1870
     my $html = ($mail->html)[0];
     return $html->scrubbed if $html;
 
@@ -67,8 +61,8 @@ sub format_body {
     my @addresses = Email::Store::Entity::Address->retrieve_all;
 
     unless (defined $html) {
-    $decorator->add_filter("Quoted", begin => '<div class="level%i">',
-                                     end   => '</div>') ;
+    $decorator->add_filter("Quoted", begin => '<span style="display: block;" class="level%i">',
+                                     end   => '</span>') ;
 
 
     $decorator->add_filter("URIFind");
@@ -103,11 +97,11 @@ sub filter_node {
             my $nn = encode_entities($name->name);
             my $id = $name->id;
             $node->{representations}{html} =~ s{\b\Q$nn\E\b}
-                {<A HREF="${base}name/view/$id" class="personknown"> <SUP><IMG SRC="$img/personknown.gif"> </SUP>$nn</A>}gmsi;
+                {<a href='${base}name/view/$id' class='personknown'> <sup><img src='$img/personknown.gif' alt='known person' /> </sup>$nn</a>}gmsi;
 #        } elsif ($entity->score >= 20) { # Have to be damned sure
 #            my $nn = encode_entities($entity->thing);
 #            $node->{representations}{html} =~ s{\b\Q$nn\E\b}
-#                {<span class="personunknown"> <SUP><IMG SRC="$img/personunknown.gif"> </SUP>$nn</span>}gims;
+#                {<span class="personunknown"> <sup><img src="$img/personunknown.gif"> </sup>$nn</span>}gims;
         }
     }
     return $node;
@@ -137,10 +131,10 @@ sub filter_node {
             if ($addresses{$orig_email}) {
                 my $add = $addresses{$orig_email};
                 my $id  = $add->id;
-                return "<A HREF='${base}address/view/$id' class='personknown'>".
-                       " <SUP><IMG SRC='$img/personknown.gif'> </SUP>$orig_email</A>"
+                return "<a href='${base}address/view/$id' class='personknown'>".
+                       " <sup><img src='$img/personknown.gif' alt='known person' /> </sup>$orig_email</a>"
             } else {
-                return "<SUP><IMG SRC='$img/personunknown.gif'> </SUP>$orig_email";
+                return "<sup><img src='$img/personunknown.gif' alt='known person' /> </sup>$orig_email";
             }
                                        
     });

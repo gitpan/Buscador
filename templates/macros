@@ -3,69 +3,72 @@
 [% MACRO from_entity(mail) BLOCK; mail.addressings("role", "From").list.first.entity; END; %]
 
 [% MACRO link_addr(addr) BLOCK; %]
-<A
-HREF="[%base | remove('/$')%]/address/view/[%addr.id%]">[%addr.address%]</A>
+<a href="[% base | remove( '/$' ) %]/address/view/[% addr.id %]">[% addr.address %]</a>
 [% END; %]
 
+[% MACRO make_atom(url) BLOCK; %]
+    <div class="atom"><a href="[% base | remove('/$') %]/[% url | remove ('^/') %]"><img src="[% config.img_base | replace('/$')%]/atompixel.png" style="border: 0;" width="80" height="15" alt="atom feed" /></a></div>
+[% END %]
+
 [% MACRO show_lists(mail) BLOCK; %]
-    <SPAN CLASS="lists">
+    [% IF mail.lists %]
+    <span class="lists">
             [% FOR list = mail.lists %]
-                <A HREF="[%base | remove('/$')%]/list/view/[%list.id%]">[%list%]</A>
+                <a href="[% base | remove('/$') %]/list/view/[% list.id %]">[% list %]</a>
                 [% ", " UNLESS mail.lists.last == list %]
             [% END %]
-    </SPAN>
+    </span>
+    [% END %]
 [% END; %] 
 
 [% MACRO show_original(mail) BLOCK; %]
-    <BLOCKQUOTE>
-    [% mail.original |html %]
-    </BLOCKQUOTE>
+    <blockquote>
+    <p>[% mail.original | html %]</p>
+    </blockquote>
 [% END; %]
 
 [% MACRO summary_link(mail) BLOCK; %]
-    <A HREF="[%base | remove('/$') %]/mail/view/[%mail.id | uri | html%]">
-    [% mail.subject |html %]
-    </A> 
-    - <A
-    HREF="[%base|remove('/$')%]/entity/view/[% from_entity(mail)%]"
-    class="secondarylink">[% from_name(mail) %]</A>
+    <a href="[% base | remove('/$') %]/mail/view/[% mail.id | uri | html %]">[% mail.subject | html %]</a> 
+    - <a href="[% base | remove('/$') %]/entity/view/[% from_entity(mail) %]" class="secondarylink">[% from_name(mail) %]</a>
 [% END %]
 
 [% MACRO search_result(mail,terms) BLOCK; %]
    [% summary_link(mail); %]
-   <BR>
+   <br />
    [% show_lists(mail); %]
-       <BLOCKQUOTE>
-           [% mail.contextualize_result(terms)  %]
-       </BLOCKQUOTE>
+       <blockquote>
+           <p>[% mail.contextualize_result(terms)  %]</p>
+       </blockquote>
 [% END %]
 
 [% MACRO summary(mail, date) BLOCK; %]
-[% summary_link(mail) %] 
+<p>[% summary_link(mail) %] 
 [% IF date %]
-    (<a href="[% base | remove('/$') %]/date/list/[% mail.date.strftime("%Y/%m/%d/") %]">[%mail.date.ymd%]</a>)
+    (<a href="[% base | remove('/$') %]/date/list/[% mail.date.strftime("%Y/%m/%d/") %]">[% mail.date.ymd %]</a>)
 [% END %]
-    <BR>
-    [%show_lists(mail)%]
-    [%show_original(mail)%]
+    <br />
+    [% show_lists(mail) %]
+</p>
+    [% show_original(mail) %]
 [% END %]
 
 [% MACRO mails_by_addressing(thing) BLOCK; %]
 
-<TABLE class="view">
+<table class="view">
 [% FOR addressing =  sorted_addressings %]
-<TR>
-<TD class="field">
+<tr>
+<td class="field">
 [% addressing.role %]
-</TD>
-<TD>
+</td>
+<td>
 [% addressing.name.name %] ([% addressing.address.address %])
-</TD>
-</TR>
-<TD> &nbsp; </TD><TD>
+</td>
+</tr>
+<tr>
+<td> &nbsp; </td><td>
 [% summary(addressing.mail,1) %] 
-</TD>
-</TR>
+</td>
+</tr>
 [% END %]
-</TABLE>
+</table>
 [% END %]

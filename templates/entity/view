@@ -3,34 +3,31 @@
 
 [% SET names = entity.names.unique %]
 [% IF names.length > 1 %]
-    <H1> [% entity.most_common_name.name |html %] </h1>
+    <h1>[% entity.most_common_name.name |html %]</h1>
 [% INCLUDE searchbox %]
-    <DIV class="aka">
-        <P>Also known as:</P>
-        <UL>
+    <div class="aka">
+        <p>Also known as:</p>
+        <ul>
             [% FOR my_name = names %]
-                <LI> <A HREF="[%base|remove('/$')%]/name/view/[% my_name.id %]">
-                      [% my_name.name | html %]
-                </A></LI>
+                <li><a href="[%base|remove('/$')%]/name/view/[% my_name.id %]">[% my_name.name | html %]</a></li>
             [% END %]
-        </DIV>
+    </ul>
+        </div>
 [% ELSE %]
-    <H1> [% names.first.name |html%] </h1>
+    <h1>[% names.first.name |html%]</h1>
 [% INCLUDE searchbox %]
 
-<P>See mails mentioning <A HREF="[%base|remove('/$')%]/name/view/[%
-names.first.id %]">[%names.first.name |html%]</A></P>
+<p>See mails mentioning <a href="[%base|remove('/$')%]/name/view/[% names.first.id %]">[%names.first.name |html%]</a></p>
 [% END %]
 
-<P>Addresses</P>
-<UL>
+<p>Addresses</p>
+<ul>
 [% FOR addr = entity.addresses.unique %]
-<LI> [% link_addr(addr) %]
+    <li>[% link_addr(addr) %]</li>
 [% END %]
-</UL>
-
+</ul>
 
 [% mails_by_addressing(entity) %]
 
-<a href="[%base|remove('/$')%]/entity/atom/[% entity.id %]"><img src="[% config.img_base %]/atom.gif"></a>
+[% make_atom("entity/atom/$entity.id") %]
 [% INCLUDE footer %]

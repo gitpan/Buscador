@@ -1,7 +1,6 @@
 package Buscador::Attachment;
 use strict;
 
-
 =head1 NAME
 
 Buscador::Attachment - Buscador plugin to access attachments
@@ -33,15 +32,17 @@ Copyright 2004, Simon Cozens
 
 package Email::Store::Attachment;
 use strict;
+use MIME::Base64 qw(decode_base64);
+
 
 sub view :Exported {
     my ($self, $r, $att) = @_;
 
 
-    $r->ar->headers_out->set("Content-Disposition" => "inline; filename=".$att->filename) if $a;
+    $r->ar->headers_out->set("Content-Disposition" => "inline; filename=".$att->filename) if $att->filename;
 
     $r->{content_type} = $att->content_type;
-    $r->{output} = $att->payload;
+    $r->{output} = ($att->content_type =~ m!^text/!) ? $att->payload: decode_base64($att->payload);
 }
 
 1;

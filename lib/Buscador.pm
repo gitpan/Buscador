@@ -1,18 +1,18 @@
 package Buscador;
 use strict;
 use vars qw($VERSION);
-#use base 'Maypole::Redirect';
-use base 'Apache::MVC';
+use base 'Maypole::Redirect';
+#use base 'Apache::MVC';
 
-$VERSION = "0.1";
+$VERSION = "0.2";
 
 #use Maypole::Cache;
+use Buscador::Config;
 Buscador->config->{cache_options}{class} = "Cache::FileCache";
 
-use Buscador::Config;
 use Maypole::Constants;
 our $home;
-sub debug{0}
+sub debug() {0}
 
 BEGIN { 
     require Email::Store;
@@ -34,11 +34,13 @@ BEGIN {
                       grep { !/SUPER$/ } 
                       grep { $_->can("table") } 
                       Buscador->stores;
+
+
     
     # not needed any more
-    # my @setup =  sort qw/ Email::Store::Mail Email::Store::List  Email::Store::Date
-    # Email::Store::Entity Email::Store::Entity::Name Email::Store::Attachment
-    # Email::Store::Entity::Address Email::Store::NamedEntity Email::Store::Vote /;
+    #@stores =  sort qw/ Email::Store::Mail Email::Store::List  Email::Store::Date
+    #Email::Store::Entity Email::Store::Entity::Name Email::Store::Attachment
+    #Email::Store::Entity::Address Email::Store::NamedEntity Email::Store::Vote /;
 
 
     Buscador->setup([ @stores ]); 
@@ -236,8 +238,6 @@ Originally Simon Cozens, E<lt>simon@cpan.orgE<gt>
 Now maintained by Simon Wistow, E<lt>simon@thegestalt.orgE<gt>
 
 =head1 SUPPORT
-
-Buscador has its own page at http://thegestalt.org/buscador/
 
 This module is part of the Siesta project - http://siesta.unixbeard.net
 

@@ -1,5 +1,27 @@
 package Buscador::UTF8;
 
+
+package Email::Store::Mail;
+use strict;
+
+sub body {
+    my $mail = shift;
+    my $mime = Email::MIME->new($mail->message);
+       
+    my $body = $mime->body;
+    my $charset = $mime->{ct}->{attributes}{charset};
+    if ($charset and $charset !~ /utf-?8/i) {
+        eval {
+            require Encode;
+            $body = Encode::decode($charset, $body);
+            Encode::_utf8_off($body);
+        };
+    }
+    $body;
+}
+
+1;
+
 =head1 NAME
 
 Buscador::UTF8 - Buscador plugin to encode the body of a message to UTF8
@@ -13,7 +35,7 @@ that returns a UTF-8 encoded body text.
 
 Simon Cozens, <simon@cpan.org>
 
-with work from 
+with work from
 
 Simon Wistow, <simon@thegestalt.org>
 
@@ -24,33 +46,3 @@ Copyright 2004, Simon Cozens
 =cut
 
 
-package Email::Store::Mail;
-use strict;
-
-sub subject {
-    my $mail = shift;
-    my $mime = Email::MIME->new($mail->message);
-
-    my $subject = $mime->header('subject');
-    
-    return $subject;
-}
-
-sub body {
-    my $mail = shift;
-    my $mime = Email::MIME->new($mail->message);
-
-    my $body = $mime->body;
-
-    my $charset = $mime->{ct}->{attributes}{charset};
-    if ($charset and $charset !~ /utf-?8/i) {
-        eval {
-            require Encode;
-            $body = Encode::decode($charset, $body);
-            Encode::_utf8_off($body);
-        };
-    }
-    return $body;
-}
-
-1;

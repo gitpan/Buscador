@@ -42,6 +42,7 @@ use strict;
 use Time::Piece;
 use Time::Seconds;
 use Lingua::EN::Numbers::Ordinate;
+use Memoize;
 
 sub view :Exported {
     my $self = shift;
@@ -71,7 +72,15 @@ sub day {
     my $deftime    = localtime;
     my $time;
 
-    my $s = sprintf "%.4d-%.2d-%.2d", $objects[0], $objects[1], $objects[2];
+    my $year  = fix_year($objects[0]); 
+    my $month = fix_month($objects[1]);
+    my $day   = $objects[2]; 
+
+    $objects[0] = $year;
+    $objects[1] = $month;
+
+
+    my $s = sprintf "%.4d-%.2d-%.2d", $year, $month, $day;
     eval {
             $time      = Time::Piece->strptime($s, "%Y-%m-%d");
     };
@@ -92,8 +101,14 @@ sub day {
 sub month {
     my ($self,$r, @objects) = @_;
 
-    my $year  = $objects[0];
-    my $month = $objects[1];
+    my $year  = fix_year($objects[0]);  return 0 unless defined $year;
+    my $month = fix_month($objects[1]); return 0 unless defined $month;
+
+    $objects[0] = $year;
+    $objects[1] = $month;
+
+
+    
     my $s     = sprintf "%.4d-%.2d-%.2d", $year, $month, 15;
     my $date  = Time::Piece->strptime($s, "%Y-%m-%d");
 
@@ -122,7 +137,11 @@ sub year {
 
 
     my @months;
-    my $year = $objects[0];
+    my $year = fix_year($objects[0]); return 0 unless defined $year;
+
+    $objects[0] = $year;        
+
+    
 
 
     for my $m (1..12) {
@@ -137,6 +156,37 @@ sub year {
 
 
     return 1;
+}
+
+memoize('fix_year');
+sub fix_year {
+    my $year = shift; return unless $year =~ /^\d+$/;
+    $year   += 0; # force numerical    
+    return undef if $year < 1;
+    my @lt   = localtime();
+    my $cur  = sprintf("%02d", $lt[5] % 100) + 0;
+    my $millenia = $lt[5] + 1900; $millenia -= $millenia % 1000;
+
+    return $millenia           + $year if ($year <= $cur);
+    return ($millenia - 1000)  + $year if ($year < 100);
+    return $year;
+}
+
+memoize('fix_month');
+sub fix_month {
+    my $month = shift;
+    if ($month =~ /^\d+/) {
+        return undef if $month > 12 || $month < 1;
+        return $month;
+    }    
+    $month = lc(substr $month,0,3);
+    my %months; my $counter = 1;
+    for (qw(jan feb mar apr may jun jul aug sep oct nov dec)) {
+        $months{$_} = $counter++;
+    }
+    
+    return $months{$month};
+
 }
 
 use Class::DBI::Pager;

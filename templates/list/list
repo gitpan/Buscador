@@ -1,12 +1,10 @@
 [% INCLUDE header %]
-<h1> Perl Mailing Lists </h1>
+<h1>Mailing Lists</h1>
 
 [% PROCESS searchbox %]
 [% FOR list = objects %]
 
-<h3> <A HREF="[%base | remove('/$')%]/list/view/[%list.id%]">
-    [%list.name%]
-    </A></h3>
-<P> List posting address: [%list.posting_address%] </P>
+<h3><a href="[%base | remove('/$')%]/list/view/[%list.id%]">[%list.name%]</a></h3>
+<p>List posting address: [%list.posting_address%]</p>
 [% END %]
 [% INCLUDE footer %]

@@ -2,11 +2,11 @@
 [% PROCESS macros %]
 
 [% FOR mail = mails %]
-<P>
+<p>
     [% summary_link(mail) %]
-    <BLOCKQUOTE>
+    <blockquote>
     [% mail.original %]
-    </BLOCKQUOTE>
-</P>
+    </blockquote>
+</p>
 [% END %]
 [% INCLUDE pager %]

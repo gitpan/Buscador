@@ -1,6 +1,6 @@
 [% INCLUDE header title="Mails for $year" %]
 [% PROCESS macros %]
-<h1> Mails for [% year %] </h1>
+<h1>Mails for [% year %]</h1>
 
 [% INCLUDE searchbox %]
 
@@ -8,7 +8,7 @@
                    'July', 'August', 'September', 'October', 'November', 'December' ];
 %]
 
-<div align="center">
+<div style="text-align: center;">
 
 <p>
 <b>
@@ -19,13 +19,15 @@
 </p>
 
 [% count = 0 %]
-<table  border="0" class="calendar" cellpadding="1" cellspacing="2">
+<table border="0" class="calendar" cellpadding="1" cellspacing="2">
 [% FOR month = months %]
-    <tr height="40"><td width="166" class="[% month ? 'event' : 'noevent' %]" align="center">
+    <tr style="height: 40;"><td style="width: 166px; height: 40px; text-align: center;" class="[% month ? 'event' : 'noevent' %]">
         <a href="[% base | remove('/$') %]/date/list/[% year %]/[% count + 1 | format("%.2d") %]">[% mapping.$count %]</a>
         [% IF month %]<br/>([% month %])[% END %]
     </td></tr>
     [% count = count + 1 %]
 [% END %]
 </table>
+
+</div>
 [% INCLUDE footer %]

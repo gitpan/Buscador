@@ -1,8 +1,8 @@
-</DIV>
+</div>
 [% IF pager %]
-<DIV class="footer">
+<div class="footer">
 [% INCLUDE pager %]
-</DIV>
+</div>
 [% END %]
 </body>
 </html>

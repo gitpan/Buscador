@@ -4,7 +4,7 @@ use base qw(Exporter);
 our @EXPORT = qw($root);
 
 
-$root = '[A';
+$root = '/usr/local/buscador';
 
 1;
 
@@ -21,7 +21,7 @@ Buscador::Root - information about where default Buscador files are installed
 
     require Buscador::Root;
 
-    print $Buscador::Root::root; # prints [A
+    print $Buscador::Root::root; # prints /usr/local/buscador
 
 
 =head1 CREATION

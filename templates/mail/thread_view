@@ -1,5 +1,5 @@
 [% BLOCK display_thread_rec; %]
-<li class="thread" id="m_[% thread.mail.id %]">
+<li class="thread" id="m_[% thread.message.id | replace('@','_') %]">
 
 [%- IF thread.message -%]
         [%- summary_link(thread.message) %] <i>

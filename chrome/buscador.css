@@ -27,6 +27,14 @@ BODY {
     margin-right: 10px;
 }
 
+.atom {
+    float: right;
+    margin-right: 10px;
+    padding: 5px;
+}
+
+
+
 ul.threads {
     font: 12px Verdana,sans-serif;
     border: 1px solid black;
@@ -205,8 +213,9 @@ pre { background: white; border: 1px solid black; padding: 10px; }
 }
 .searchhints {
     font: 10px bold Verdana,sans-serif;
-         display: block;
-          BACKGROUND-COLOR: #ffffea;
+    display: block;
+    BACKGROUND-COLOR: #ffffea;
+    text-align: center;
 }
 
 .lists {
@@ -248,7 +257,8 @@ pre { background: white; border: 1px solid black; padding: 10px; }
 
 
 table.calendar {
-
+    margin-left:auto; 
+    margin-right:auto;
 }
 
 table.calendar th {

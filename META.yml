@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name: Buscador
-version: 0.1
+version: 0.2
 author:
   - |-
     Originally Simon Cozens, E<lt>simon@cpan.orgE<gt>
@@ -22,6 +22,8 @@ requires:
   Email::Store::Thread: 1.2
   File::NCopy: 0
   HTML::Entities: 0
+  MIME::Base64: 0
+  Mail::Thread::Arc: 0.22
   Mail::Thread::Chronological: 0
   Maypole::Cache: 0
   Maypole::Redirect: 0
@@ -37,7 +39,7 @@ dynamic_config: 1
 provides:
   Buscador:
     file: lib/Buscador.pm
-    version: 0.1
+    version: 0.2
   Buscador::Addressing:
     file: lib/Buscador/Addressing.pm
   Buscador::Atom:
@@ -82,8 +84,14 @@ provides:
     file: lib/Buscador/Atom.pm
   Email::Store::Mail:
     file: lib/Buscador/UTF8.pm
+  Email::Store::Thread::Arc::Link:
+    file: lib/Buscador/Thread.pm
   Email::Store::Vote:
     file: lib/Email/Store/Vote.pm
   Mail::Thread:
     file: lib/Buscador/Thread.pm
+  Text::Decorator::Filter::Addresses:
+    file: lib/Buscador/Decorate.pm
+  Text::Decorator::Filter::NamedEntity:
+    file: lib/Buscador/Decorate.pm
 generated_by: Module::Build version 0.25

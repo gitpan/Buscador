@@ -3,42 +3,43 @@
 [% MACRO addressing_row(mail, role) BLOCK; %]
     [% SET addressings = mail.addressings("Role", role) %]
     [% IF addressings %]
-    <TR>
-        <TD class="field"> [% role %] </TD>
-        <TD>
+    <tr>
+        <td class="field"> [% role %] </td>
+        <td>
             [% FOR addressing = addressings("Role", role) %]
-            <A HREF="[%base | remove('/$')%]/entity/view/[% addressing.entity %]">
-                [% addressing.name.name html %] ([% addressing.address.address %])
-            </A>
+            <a href="[%base | remove('/$')%]/entity/view/[% addressing.entity %]">
+                [% addressing.name.name %] ([% addressing.address.address %])
+            </a>
                 [% ", " UNLESS addressings.last == addressing %]
             [% END %]
-        </TD>
-    </TR>
+        </td>
+    </tr>
     [% END %]
 [% END %]
 
 [% MACRO lists_row(mail) BLOCK; %]
     [% IF mail.lists %]
-    <TR>
-        <TD class="field"> Lists </TD>
-        <TD>
+    <tr>
+        <td class="field"> Lists </td>
+        <td>
             [% FOR list = mail.lists %]
-                <A HREF="[%base | remove('/$')%]/list/view/[%list.id%]">[%list%]</A>
+                <a href="[%base | remove('/$')%]/list/view/[%list.id%]">[%list%]</a>
                 [% ", " UNLESS mail.lists.last == list %]
             [% END %]
-        </TD>
-    </TR>
+        </td>
+    </tr>
     [% END %]
 [% END %]
 
 [% MACRO attachments(mail) BLOCK; %]
-        <DIV class="attachments">
+        <div class="attachments">
         Attachments:
         <ul>
         [% FOR att = mail.attachments %]
-            <li> <A HREF="[%base |
-            remove('/$')%]/attachment/view/[%att.id%]">[% att.filename
-            %]</A> <small>([% att.content_type %])</small>
+            <li> <a href="[%base |
+            remove('/$')%]/attachment/view/[%att.id%]/[% att.filename %]">
+            [% att.filename %]</a> <small>([% att.content_type %])</small>
+            </li>
         [% END %]
         </ul>
         </div>

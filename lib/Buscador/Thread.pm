@@ -8,13 +8,14 @@ Buscador::Thread - provide some thread views for Buscador
 =head1 DESCRIPTION
 
 This provides two different thread views for Buscador - traditional 
-'JWZ' style view and a rather funky looking 'lurker' style. They can be 
+'JWZ' style view, a rather funky looking 'lurker' style and a thread
+arc style cribbed from the IBM ReMail research project. They can be 
 accessed using 
 
 
     ${base}/mail/thread/<id>
     ${base}/mail/lurker/<id>
-
+    ${base}/mail/arc/<id>
 
 where C<id> can be the message-id of any message in the thread. neat, huh?
 
@@ -26,6 +27,9 @@ http://www.jwz.org/doc/threading.html
 
 Lurker style
 http://lurker.sourceforge.net
+
+ReMail Arc style
+http://www.research.ibm.com/remail/
 
 =head1 AUTHOR
 
@@ -49,10 +53,46 @@ sub _get_hdr {
     $msg->simple->header($hdr) || '';
 }
 
+package Email::Store::Thread::Arc::Link;
+use base qw(Mail::Thread::Arc);
+
+
+sub make_link {
+    my ($self,$message) = @_;
+
+    # check to see if we actually have this on the system
+    # if not, return undef
+    my $id  = $message->messageid;
+    my $m   = Email::Store::Mail->retrieve($id);
+    return undef unless $m && $m->message;
+    my $url = Buscador->config->{uri_base}; $url =~ s!/+$!!;
+    return "$url/mail/view/$id";
+}
 
 package Email::Store::Mail;
 use strict;
 use Mail::Thread::Chronological;
+use Apache;
+
+sub arc :Exported {
+    my ($self,$r)  = @_;
+    my $mail       = $r->objects->[0];
+    my $root       = $mail->container->root;
+    my $arc        = Email::Store::Thread::Arc::Link->new;
+    while (1) {
+        last if $root->message->date;
+        my @children = $root->children;
+        last if (@children>1);
+        $root = $children[0];
+    }
+    my $svg = $arc->selected_message( undef )->render( $root);
+
+    
+    $r->{content_type} = 'image/svg+xml';
+    $r->{output}       = $svg->xmlify;
+}
+
+
 
 sub lurker :Exported {
    my ($self,$r)  = @_;
@@ -107,7 +147,7 @@ sub thread_as_html {
         last if (@children>1);
         $cont = $children[0];
     }
-    my $html = "<UL class=\"mktree\">\n";
+    my $html = "<ul class=\"mktree\">\n";
     my $add_me;
     my $base = Buscador->config->{uri_base};
     $add_me = sub {
@@ -119,9 +159,9 @@ sub thread_as_html {
         if (!$mess) { $html .= "<i>message not available</i>" }
         elsif ($c == $orig) { $html .= "<b> this message </b>" }
         else {
-            $html .= qq{<A HREF="${base}mail/view/}.$mess->id.q{">}.
-        $mess->subject."</A>\n";
-        $html .= "<BR>&nbsp;&nbsp<SMALL>".eval {$mess->addressings(role =>"From")->first->name->name}."</SMALL>\n";
+            $html .= qq{<a href="${base}mail/view/}.$mess->id.q{">}.
+        $mess->subject."</a>\n";
+        $html .= "<br />&nbsp;&nbsp<small>".eval {$mess->addressings(role =>"From")->first->name->name}."</small>\n";
         }
 
         if ($c->children) {

@@ -62,11 +62,11 @@ StatINC allows me to develop without restarting Apache every time.
 
 Change to 
 
-	/virtual/thegestalt.org/www/html/buscador/demo
+    /virtual/thegestalt.org/www/html/buscador/demo
 
 (or wherever you put in step 3) and run
 
-	% buscador -init
+    % buscador -init
 
 Which will copy a load of template files and create a buscador.config file.
 
@@ -99,7 +99,7 @@ from your buscador.config file.
 
 Again, be in your buscador directory and do 
 
-	% buscador <folder[s]>
+    % buscador <folder[s]>
 
 and it will import. You can also cat a single mail into it which is useful
 for setting up as an alias.
